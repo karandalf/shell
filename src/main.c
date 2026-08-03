@@ -2,14 +2,22 @@
 #include <stdlib.h>
 #include "input.h"
 
+
 int main(int argc, char *argv[]) {
 	setbuf(stdout, NULL);
-	char command[BUFSIZE];
+	char input[BUFSIZE];
+	struct shell shell;
+	int job;
 
-	while (true){
+	Command *commandList[COMMANDS];
+	commands(commandList);
+
+	shell.run = 1;
+	
+	while (shell.run){
 	printf("$ ");
-	getInput(command);
-	printf("%s: command not found\n", command);
+	job = getInput(input, commandList);
+	eval(job, input, &shell);
 	}
 
 	return 0;
