@@ -54,7 +54,7 @@ void eval(struct shell *shell, Command **commandList){
 			if ((*(commandList + i))->type == BUILTIN)
 				printf("%s is a shell builtin\n", shell->token);
 		if (i == COMMANDS)
-			printf("%s: command not found\n", shell->token);
+			printf("%s: not found\n", shell->token);
 	}
 	else
 		Invalid:
