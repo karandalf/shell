@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "input.h"
 
 int main(int argc, char *argv[]) {
-  // Flush after every printf
-  setbuf(stdout, NULL);
+	setbuf(stdout, NULL);
+	char command[BUFSIZE];
 
-  // TODO: Uncomment the code below to pass the first stage
-  printf("$ ");
+	printf("$ ");
+	getInput(command);
+	printf("%s: command not found\n", command);
 
-  return 0;
+	return 0;
 }
