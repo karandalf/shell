@@ -6,11 +6,8 @@
 #include <string.h>
 
 #define BUFSIZE 100
-#define COMMANDS 2
+#define COMMANDS 3
 
-#define BUILTIN 1
-#define EXIT 1
-#define ECHO 2
 
 typedef struct{
 	char *name;
@@ -20,12 +17,13 @@ typedef struct{
 
 struct shell{
 	int run;
+	int job;
 	char command[BUFSIZE];
 	char token[BUFSIZE];
 };
 
 
-int getInput(struct shell *shell, Command **commandList);
+void getInput(struct shell *shell, Command **commandList);
 void commands(Command **commandList);
-void eval(int job, struct shell *shell);
+void eval(struct shell *shell, Command **commandList);
 #endif

@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 	
 	while (shell.run){
 	printf("$ ");
-	job = getInput(&shell, commandList);
-	eval(job, &shell);
+	getInput(&shell, commandList);
+	eval(&shell, commandList);
 	}
 
 	return 0;

@@ -1,4 +1,5 @@
 #include "input.h"
+#include "command.h"
 
 Command *createCommand (char *name, int type, int job){
 	Command *command = (Command *)malloc(sizeof(Command));
@@ -12,9 +13,10 @@ void commands(Command **commandList){
 	size_t p = 0;
 	commandList[p++] = createCommand("exit", BUILTIN, EXIT);
 	commandList[p++] = createCommand("echo", BUILTIN, ECHO);
+	commandList[p++] = createCommand("type", BUILTIN, TYPE);
 }
 
-int getInput(struct shell *shell, Command **commandList){
+void getInput(struct shell *shell, Command **commandList){
 	char c;
 	size_t i;
 	int job = 0;
@@ -34,15 +36,28 @@ int getInput(struct shell *shell, Command **commandList){
 			break;
 		}
 	}
-	return job;
+	shell->job = job;
 }
 
-void eval(int job, struct shell *shell){
-	if (job == EXIT)
+void eval(struct shell *shell, Command **commandList){
+	if (shell->job == EXIT)
 		shell->run = 0;
-	else if (job == ECHO)
+	else if (shell->job == ECHO)
 		printf("%s\n", shell->token);
+	else if (shell->job == TYPE){
+		size_t i;
+		for (i = 0; i < COMMANDS; i++){
+			if (strcmp(shell->token,(*(commandList + i))->name) == 0)
+				break;
+		}
+		if (i < COMMANDS)
+			if ((*(commandList + i))->type == BUILTIN)
+				printf("%s is a shell builtin\n", shell->token);
+		if (i == COMMANDS)
+			printf("%s: command not found\n", shell->token);
+	}
 	else
+		Invalid:
 		printf("%s: command not found\n", shell->command);
 }
 
