@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
 	setbuf(stdout, NULL);
-	char input[BUFSIZE];
+	char command[BUFSIZE], input[BUFSIZE];
 	struct shell shell;
 	int job;
 
@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 	
 	while (shell.run){
 	printf("$ ");
-	job = getInput(input, commandList);
-	eval(job, input, &shell);
+	job = getInput(&shell, commandList);
+	eval(job, &shell);
 	}
 
 	return 0;
