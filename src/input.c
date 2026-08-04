@@ -68,7 +68,7 @@ void eval(struct shell *shell, Command **commandList){
 			printf("arg: %s\n", *(tokens + i));
 		}*/
 		pid_t pid = fork();
-		strcpy(tokens, shell->command);
+		strcpy(*tokens, shell->command);
 		if (pid == 0){
 			execv(shell->path, tokens);	
 		}
