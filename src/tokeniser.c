@@ -15,7 +15,7 @@ char *createArg(char *arg){
 
 int parseToken(struct shell *shell, char **tokens){
 	size_t i, j;
-	size_t p = 0;
+	size_t p = 1;
 	char c;
 	char arg[BUFSIZE];
 	i = 0;
