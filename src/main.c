@@ -15,9 +15,9 @@ int main(int argc, char *argv[]) {
 	shell.run = 1;
 	
 	while (shell.run){
-	printf("$ ");
-	getInput(&shell, commandList);
-	eval(&shell, commandList);
+		printf("$ ");
+		getInput(&shell, commandList);
+		eval(&shell, commandList);
 	}
 
 	return 0;

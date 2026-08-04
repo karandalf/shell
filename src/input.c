@@ -1,11 +1,14 @@
 #include "input.h"
 #include "command.h"
+#include "file.h"
 
 Command *createCommand (char *name, int type, int job){
 	Command *command = (Command *)malloc(sizeof(Command));
-	command->name = name;
-	command->type = type;
-	command->job = job;
+	if (command != NULL){
+		command->name = name;
+		command->type = type;
+		command->job = job;
+	}
 	return command;
 };
 
@@ -50,15 +53,15 @@ void eval(struct shell *shell, Command **commandList){
 			if (strcmp(shell->token,(*(commandList + i))->name) == 0)
 				break;
 		}
+		//Checking for builtin command
 		if (i < COMMANDS)
 			if ((*(commandList + i))->type == BUILTIN)
 				printf("%s is a shell builtin\n", shell->token);
-		if (i == COMMANDS)
-			printf("%s: not found\n", shell->token);
+		if (i == COMMANDS){
+			if(!checkFile(shell))
+				printf("%s: not found\n", shell->token);
+		}
 	}
 	else
-		Invalid:
 		printf("%s: command not found\n", shell->command);
 }
-
-

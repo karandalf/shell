@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BUFSIZE 100
+#define BUFSIZE 1024
 #define COMMANDS 3
 
 
@@ -26,4 +26,5 @@ struct shell{
 void getInput(struct shell *shell, Command **commandList);
 void commands(Command **commandList);
 void eval(struct shell *shell, Command **commandList);
+
 #endif
