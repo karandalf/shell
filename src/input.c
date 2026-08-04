@@ -64,11 +64,10 @@ void eval(struct shell *shell, Command **commandList){
 			return;
 		}
 		argNums = parseToken(shell, tokens);			
-		/*for (i = 0; i < argNums; i++){
+		for (i = 0; i < argNums; i++){
 			printf("arg: %s\n", *(tokens + i));
-		}*/
+		}
 		pid_t pid = fork();
-		strcpy(*tokens, shell->command);
 		if (pid == 0){
 			execv(shell->path, tokens);	
 		}

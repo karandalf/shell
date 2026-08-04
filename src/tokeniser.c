@@ -15,11 +15,12 @@ char *createArg(char *arg){
 
 int parseToken(struct shell *shell, char **tokens){
 	size_t i, j;
-	size_t p = 1;
+	size_t p = 0;
 	char c;
 	char arg[BUFSIZE];
 	i = 0;
 	j = 0;
+	tokens[p++] = createArg(shell->command);
 	while(*(arg + j++) = *(shell->token + i++)){
 		if (*(shell->token + i) == ' ' || *(shell->token + i) == '\0'){
 			*(arg + j) = '\0';
