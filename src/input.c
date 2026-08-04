@@ -71,6 +71,7 @@ void eval(struct shell *shell, Command **commandList){
 		else{
 			wait(NULL);
 		}
+		memset(tokens, '\0', sizeof tokens);
 
 	}
 }
