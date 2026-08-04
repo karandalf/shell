@@ -1,6 +1,7 @@
 #include "input.h"
 #include "command.h"
 #include "file.h"
+#include "tokeniser.h"
 
 Command *createCommand (char *name, int type, int job){
 	Command *command = (Command *)malloc(sizeof(Command));
@@ -20,22 +21,12 @@ void commands(Command **commandList){
 }
 
 void getInput(struct shell *shell, Command **commandList){
-	char c;
 	size_t i;
 	int job = 0;
-	for (i = 0; (c = getchar()) != ' ' && (c != '\n'); i++){
-		*(shell->command + i) = c;
-	}
-	*(shell->command + i) = '\0';
-	if (c == ' '){
-		for (i = 0; (c = getchar()) != '\n' && (c != EOF); i++){
-			*(shell->token + i) = c;
-		}
-	}
-	*(shell->token + i) = '\0';
+	parseInput(shell);
 	for (i = 0; i < COMMANDS; i++){
 		if (strcmp(shell->command,(*(commandList + i))->name) == 0){
-			job = (*(commandList + i))->job;
+			job = (*(commandList + i))->job; 
 			break;
 		}
 	}
@@ -45,8 +36,10 @@ void getInput(struct shell *shell, Command **commandList){
 void eval(struct shell *shell, Command **commandList){
 	if (shell->job == EXIT)
 		shell->run = 0;
-	else if (shell->job == ECHO)
+	else if (shell->job == ECHO){
 		printf("%s\n", shell->token);
+		memset(shell->token, '\0', sizeof shell->token);
+	}
 	else if (shell->job == TYPE){
 		size_t i;
 		for (i = 0; i < COMMANDS; i++){
@@ -62,6 +55,25 @@ void eval(struct shell *shell, Command **commandList){
 				printf("%s: not found\n", shell->token);
 		}
 	}
-	else
-		printf("%s: command not found\n", shell->command);
+	else{
+		size_t i;
+		int argNums;
+		char *tokens[BUFSIZE];
+		if(!checkFile(shell)){
+			printf("%s: command not found\n", shell->command);
+			return;
+		}
+		argNums = parseToken(shell, tokens);			
+		for (i = 0; i < argNums; i++){
+			printf("arg: %s\n", *(tokens + i));
+		}
+		pid_t pid = fork();
+		if (pid == 0){
+			execv(shell->path, tokens);	
+		}
+		else{
+			wait(NULL);
+		}
+
+	}
 }

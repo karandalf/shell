@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #define BUFSIZE 1024
 #define COMMANDS 3
@@ -18,6 +20,7 @@ typedef struct{
 struct shell{
 	int run;
 	int job;
+	char path[BUFSIZE];
 	char command[BUFSIZE];
 	char token[BUFSIZE];
 };
