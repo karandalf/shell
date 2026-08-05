@@ -66,11 +66,10 @@ void eval(struct shell *shell, Command **commandList){
 			printf("Cannot print CWD\n");
 	}
 	else if (shell->job == CD){
-		if (!checkDir(shell)){
+		if (chdir(shell->token)){
 			printf("cd: %s: No such file or directory\n", shell->token);
 			return;
 		}
-		chdir(shell->token);
 		memset(shell->token, '\0',  strlen(shell->token));
 	}
 	else{
