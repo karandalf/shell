@@ -19,6 +19,7 @@ void commands(Command **commandList){
 	commandList[p++] = createCommand("echo", BUILTIN, ECHO);
 	commandList[p++] = createCommand("type", BUILTIN, TYPE);
 	commandList[p++] = createCommand("pwd", BUILTIN, PWD);
+	commandList[p++] = createCommand("cd", BUILTIN, CD);
 }
 
 void getInput(struct shell *shell, Command **commandList){
@@ -55,6 +56,7 @@ void eval(struct shell *shell, Command **commandList){
 			if(!checkFile(shell))
 				printf("%s: not found\n", shell->token);
 		}
+		memset(shell->token, '\0',  strlen(shell->token));
 	}
 	else if (shell->job == PWD){
 		char cwd[BUFSIZE];
@@ -63,7 +65,16 @@ void eval(struct shell *shell, Command **commandList){
 		else
 			printf("Cannot print CWD\n");
 	}
+	else if (shell->job == CD){
+		if (!checkDir(shell)){
+			printf("cd: %s: No such file or directory\n", shell->token);
+			return;
+		}
+		chdir(shell->token);
+		memset(shell->token, '\0',  strlen(shell->token));
+	}
 	else{
+		//memset(shell->token, '\0',  strlen(shell->token));
 		size_t i;
 		int argNums;
 		char *tokens[BUFSIZE];
@@ -79,7 +90,9 @@ void eval(struct shell *shell, Command **commandList){
 		else{
 			wait(NULL);
 		}
-		memset(tokens, '\0', sizeof tokens);
-
+		for(i = 0; i < argNums; i++){
+			free(*(tokens+i));
+			*(tokens + i) = NULL;
+		}
 	}
 }

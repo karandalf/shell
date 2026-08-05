@@ -8,5 +8,6 @@
 #define ECHO 2
 #define TYPE 3
 #define PWD 4
+#define CD 5
 
 #endif

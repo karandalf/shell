@@ -50,3 +50,20 @@ int checkFile(struct shell *shell){
 	}
 	return (dif > 0) ? EXIST : DNE; 
 }
+
+int checkDir(struct shell *shell){
+	int dif;
+	char *start = getenv("PATH");
+	char *path = start;
+	char currentPath[BUFSIZE];
+	dif = strlen(start) - (path - start);
+	if ((strcmp(shell->token, "..") == 0))
+		return EXIST;
+	while (dif > 0){
+		path = parsePath(path, currentPath);
+		if (strncmp(shell->token, currentPath,  strlen(currentPath) - 1) == 0)
+			break;
+		dif = strlen(start) - (path - start);
+	}
+	return (dif > 0) ? EXIST : DNE; 
+}

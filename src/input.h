@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 
 #define BUFSIZE 1024
-#define COMMANDS 4
+#define COMMANDS 5
 
 
 typedef struct{

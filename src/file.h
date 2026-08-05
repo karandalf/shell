@@ -6,5 +6,6 @@
 #define EXIST 1
 
 int checkFile(struct shell *shell);
+int checkDir(struct shell *shell);
 
 #endif
