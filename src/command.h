@@ -7,5 +7,6 @@
 #define EXIT 1
 #define ECHO 2
 #define TYPE 3
+#define PWD 4
 
 #endif

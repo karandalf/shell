@@ -18,6 +18,7 @@ void commands(Command **commandList){
 	commandList[p++] = createCommand("exit", BUILTIN, EXIT);
 	commandList[p++] = createCommand("echo", BUILTIN, ECHO);
 	commandList[p++] = createCommand("type", BUILTIN, TYPE);
+	commandList[p++] = createCommand("pwd", BUILTIN, PWD);
 }
 
 void getInput(struct shell *shell, Command **commandList){
@@ -54,6 +55,13 @@ void eval(struct shell *shell, Command **commandList){
 			if(!checkFile(shell))
 				printf("%s: not found\n", shell->token);
 		}
+	}
+	else if (shell->job == PWD){
+		char cwd[BUFSIZE];
+		if (getcwd(cwd, sizeof cwd) != NULL)
+			printf("%s\n", cwd);	
+		else
+			printf("Cannot print CWD\n");
 	}
 	else{
 		size_t i;
