@@ -74,7 +74,6 @@ void eval(struct shell *shell, Command **commandList){
 		memset(shell->token, '\0',  strlen(shell->token));
 	}
 	else{
-		//memset(shell->token, '\0',  strlen(shell->token));
 		size_t i;
 		int argNums;
 		char *tokens[BUFSIZE];

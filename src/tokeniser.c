@@ -21,6 +21,7 @@ int parseToken(struct shell *shell, char **tokens){
 	i = 0;
 	j = 0;
 	tokens[p++] = createArg(shell->command);
+	printf("shell token: %s\n", shell->token);
 	while(*(arg + j++) = *(shell->token + i++)){
 		if (*(shell->token + i) == ' ' || *(shell->token + i) == '\0'){
 			*(arg + j) = '\0';
@@ -40,11 +41,13 @@ void parseInput(struct shell *shell){
 		*(shell->command + i) = c;
 	}
 	*(shell->command + i) = '\0';
+	memset(shell->token, '\0',  strlen(shell->token));
 	if (c == ' '){
 		for (i = 0; (c = getchar()) != '\n' && (c != EOF); i++){
 			*(shell->token + i) = c;
 		}
 		*(shell->token + i) = '\0';
 	}
+	printf("parsed shell token: %s\n", shell->token);
 }
 
