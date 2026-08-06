@@ -36,11 +36,20 @@ int parseToken(struct shell *shell){
 				quoting.mode = 0;
 				i += 1;
 		}
-		if ((*(shell->token + i) == ' ' || *(shell->token + i) == '\0') && quoting.mode == 0){
+		/*if ((*(shell->token + i) == ' ' || *(shell->token + i) == '\0') && quoting.mode == 0){
 			*(arg + j) = '\0';
 			shell->tokens[p++] = createArg(arg);
 			//p = (quoting.singleQ == 1) ? --p : p;
 			j = 0;
+		}*/
+		if (quoting.mode == 0){
+			while (*(shell->token + i) == ' ')
+				i++;
+			if (*(shell->token + i - 1) == ' ' || *(shell->token + i) == '\0'){
+				*(arg + j) = '\0';
+				shell->tokens[p++] = createArg(arg);
+				j = 0;
+			}
 		}
 	}
 	memset(shell->token, '\0', sizeof shell->token);
