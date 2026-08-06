@@ -13,7 +13,7 @@ static int exists(char *currentPath, struct shell *shell){
 		return DNE;
 	}
 	struct stat sb;
-	if (stat(currentPath, &sb) == 0 && sb.st_mode & S_IXUSR){
+	if (stat(currentPath, &sb) == 0 && (sb.st_mode & S_IXUSR) && (strncmp(currentPath, "/mnt", 4) != 0)){
 		if (shell->job == TYPE) printf("%s is %s\n", command, currentPath);
 		strcpy(shell->path, currentPath);
 		fclose(file);

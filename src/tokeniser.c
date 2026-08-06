@@ -13,23 +13,23 @@ char *createArg(char *arg){
 	return token;
 };
 
-int parseToken(struct shell *shell, char **tokens){
+int parseToken(struct shell *shell){
 	size_t i, j;
 	size_t p = 0;
 	char c;
 	char arg[BUFSIZE];
 	i = 0;
 	j = 0;
-	tokens[p++] = createArg(shell->command);
+	shell->tokens[p++] = createArg(shell->command);
 	while(*(arg + j++) = *(shell->token + i++)){
 		if (*(shell->token + i) == ' ' || *(shell->token + i) == '\0'){
 			*(arg + j) = '\0';
-			tokens[p++] = createArg(arg);
+			shell->tokens[p++] = createArg(arg);
 			j = 0;
 		}
 	}
 	memset(shell->token, '\0', sizeof shell->token);
-	tokens[p] == NULL;
+	shell->tokens[p] == NULL;
 	return p;
 }
 

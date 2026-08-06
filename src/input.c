@@ -36,8 +36,9 @@ void getInput(struct shell *shell, Command **commandList){
 }
 
 void eval(struct shell *shell, Command **commandList){
-	if (shell->job == EXIT)
+	if (shell->job == EXIT){
 		shell->run = 0;
+	}
 	else if (shell->job == ECHO){
 		printf("%s\n", shell->token);
 		memset(shell->token, '\0', sizeof shell->token);
@@ -76,22 +77,23 @@ void eval(struct shell *shell, Command **commandList){
 	else{
 		size_t i;
 		int argNums;
-		char *tokens[BUFSIZE];
-		if(!checkFile(shell)){
+		//char *tokens[BUFSIZE];
+		if(!checkFile(shell) || *(shell->command) == '\0'){
 			printf("%s: command not found\n", shell->command);
 			return;
 		}
-		argNums = parseToken(shell, tokens);			
+		argNums = parseToken(shell);			
 		pid_t pid = fork();
 		if (pid == 0){
-			execv(shell->path, tokens);	
+			//printf("path: %s\n", shell->path);
+			execv(shell->path, shell->tokens);	
 		}
 		else{
 			wait(NULL);
 		}
 		for(i = 0; i < argNums; i++){
-			free(*(tokens+i));
-			*(tokens + i) = NULL;
+			free(*(shell->tokens+i));
+			*(shell->tokens + i) = NULL;
 		}
 	}
 }

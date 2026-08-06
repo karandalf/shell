@@ -13,8 +13,8 @@ int main(int argc, char *argv[]) {
 	commands(commandList);
 
 	shell.run = 1;
-	
-	while (shell.run){
+
+	while (shell.run == 1){
 		printf("$ ");
 		getInput(&shell, commandList);
 		eval(&shell, commandList);
