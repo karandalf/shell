@@ -18,13 +18,28 @@ int parseToken(struct shell *shell){
 	size_t p = 0;
 	char c;
 	char arg[BUFSIZE];
+	struct quoting quoting;
 	i = 0;
 	j = 0;
+	quoting.mode = 0;
 	shell->tokens[p++] = createArg(shell->command);
+	switch(*(shell->token)){
+		case '\'':
+			quoting.singleQ = 1;
+			quoting.mode = 1;
+			i += 1;
+	}
 	while(*(arg + j++) = *(shell->token + i++)){
-		if (*(shell->token + i) == ' ' || *(shell->token + i) == '\0'){
+		switch(*(shell->token + i)){
+			case '\'':
+				quoting.singleQ = 0;
+				quoting.mode = 0;
+				i += 1;
+		}
+		if ((*(shell->token + i) == ' ' || *(shell->token + i) == '\0') && quoting.mode == 0){
 			*(arg + j) = '\0';
 			shell->tokens[p++] = createArg(arg);
+			//p = (quoting.singleQ == 1) ? --p : p;
 			j = 0;
 		}
 	}

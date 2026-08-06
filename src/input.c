@@ -40,8 +40,15 @@ void eval(struct shell *shell, Command **commandList){
 		shell->run = 0;
 	}
 	else if (shell->job == ECHO){
-		printf("%s\n", shell->token);
+		int argNum = parseToken(shell);
+		for (size_t i = 0; i < argNum - 1; i++)
+			printf("%s ", *(shell->tokens + 1 + i));
+		putchar('\n');
 		memset(shell->token, '\0', sizeof shell->token);
+		for(size_t i = 0; i < argNum; i++){
+			free(*(shell->tokens+i));
+			*(shell->tokens + i) = NULL;
+		}
 	}
 	else if (shell->job == TYPE){
 		size_t i;
