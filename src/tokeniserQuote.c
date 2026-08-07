@@ -23,18 +23,25 @@ int parseToken(struct shell *shell){
 	j = 0;
 	quoting.mode = 0;
 	shell->tokens[p++] = createArg(shell->command);
-	while(*(arg + j++) = *(shell->token + i++)){
-		/*switch(*(shell->token + i)){
+	while(*(shell->token + i)){
+		printf("shell->token: %c\n", *(shell->token + i));
+		switch(*(shell->token + i)){
 			case '\'':
 				quoting.singleQ = (quoting.singleQ + 1) % 2;
 				quoting.mode = (quoting.mode + 1) % 2;
-				i += 1;
-				printf("quote found, arg: %s\n", arg);
-		}*/
-		if ((*(shell->token + i) == ' ' || *(shell->token + i) == '\0') && quoting.mode == 0){
+				//i += 1;
+				printf("quote found\n");
+				*(arg + j++) = *(shell->token + ++i);
+			default:
+				*(arg + j++) = (*(shell->token + i - 1) == '\'') ? *(shell->token + ++i) : *(shell->token + i++); 
+		}
+		while (quoting.mode == 0 && *(shell->token + i) == ' '){
+			i++;
+		}
+		if ((*(shell->token + i - 1) == ' ' || *(shell->token + i) == '\0') && quoting.mode == 0){
 			*(arg + j) = '\0';
+			printf("arg comp: %s\n", arg);
 			shell->tokens[p++] = createArg(arg);
-			//p = (quoting.singleQ == 1) ? --p : p;
 			j = 0;
 		}
 	}

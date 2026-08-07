@@ -23,21 +23,32 @@ int parseToken(struct shell *shell){
 	j = 0;
 	quoting.mode = 0;
 	shell->tokens[p++] = createArg(shell->command);
-	while(*(arg + j++) = *(shell->token + i++)){
-		/*switch(*(shell->token + i)){
+	while(*(shell->token + i) != '\0'){
+		Start:
+		switch(*(shell->token + i)){
 			case '\'':
-				quoting.singleQ = (quoting.singleQ + 1) % 2;
-				quoting.mode = (quoting.mode + 1) % 2;
-				i += 1;
-				printf("quote found, arg: %s\n", arg);
-		}*/
-		if ((*(shell->token + i) == ' ' || *(shell->token + i) == '\0') && quoting.mode == 0){
-			*(arg + j) = '\0';
-			shell->tokens[p++] = createArg(arg);
-			//p = (quoting.singleQ == 1) ? --p : p;
-			j = 0;
+				i++;
+				while(*(shell->token + i) != '\''){
+					*(arg + j++) = *(shell->token + i++);
+				}
+				*(arg + j) = '\0';
+				i++;
+				shell->tokens[p++] = createArg(arg);
+				j = 0;
+				goto Start;
+			case ' ':
+				*(arg + j++) = ' ';
+				*(arg + j) = '\0';
+				shell->tokens[p++] = createArg(arg);
+				while(*(shell->token + i) == ' ')
+					i++;
+				j = 0;
+			default:
+				*(arg + j++) = *(shell->token + i++);
 		}
 	}
+	*(arg + j) = '\0';
+	shell->tokens[p++] = createArg(arg);
 	memset(shell->token, '\0', sizeof shell->token);
 	shell->tokens[p] == NULL;
 	return p;
