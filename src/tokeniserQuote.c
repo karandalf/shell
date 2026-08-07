@@ -24,23 +24,32 @@ int parseToken(struct shell *shell){
 	j = 0;
 	quoting.mode = 0;
 	shell->tokens[p++] = createArg(shell->command);
-	while(*(shell->token + i) == ' ')
-		i++;
 	while(*(shell->token + i) != '\0'){
-		printf("char:%c.\n", *(shell->token + i));
+		Start:
+		printf("char eval:%c.\n", *(shell->token + i));
 		switch(*(shell->token + i)){
-			case ' ':
-				*(arg + j++) = (shell->job == ECHO) ? ' ' : '\0';
+			/*case '\'':
+				i++;
+				while(*(shell->token + i) != '\'' && *(shell->token + i) != '\0'){
+					*(arg + j++) = *(shell->token + i++);
+				}
 				*(arg + j) = '\0';
+				printf("arg quotes: %s\n", arg);
+				i++;
+				printf("char quote:%c.\n", *(shell->token + i));
 				shell->tokens[p++] = createArg(arg);
+				j = 0;
+				goto Start;*/
+			case ' ':
+				*(arg + j) = '\0';
+				printf("arg space:%s.\n", arg);
+				shell->tokens[p++] = createArg(arg);
+				printf("shell->token:%s.\n", *(shell->tokens + p - 1));
 				while(*(shell->token + i) == ' ')
 					i++;
-				printf("token: %c\n", *(shell->token + i));
 				j = 0;
 				end = 1;
-				continue;
 			default:
-				printf("def char:%c.\n", *(shell->token + i));
 				*(arg + j++) = *(shell->token + i++);
 				end = 0;
 		}
@@ -51,7 +60,7 @@ int parseToken(struct shell *shell){
 	}
 	memset(shell->token, '\0', sizeof shell->token);
 	shell->tokens[p] == NULL;
-	//printf("p: %ld\n", p);
+	printf("p: %ld\n", p);
 	return p;
 }
 
