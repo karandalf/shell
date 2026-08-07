@@ -17,10 +17,8 @@ int parseToken(struct shell *shell){
 	char c;
 	int end = 1;
 	char arg[BUFSIZE];
-	struct quoting quoting;
 	i = 0;
 	j = 0;
-	quoting.mode = 0;
 	shell->tokens[p++] = createArg(shell->command);
 	while(*(shell->token + i) == ' ')
 		i++;
@@ -40,6 +38,17 @@ int parseToken(struct shell *shell){
 			case '\'':
 				i++;
 				while (*(shell->token + i) != '\'' && *(shell->token + i) != '\0'){
+					*(arg + j++) = *(shell->token + i++);
+				}
+				*(arg + j) = '\0';
+				shell->tokens[p++] = createArg(arg);
+				i++;
+				j = 0;
+				end = 1;
+				continue;
+			case '\"':
+				i++;
+				while (*(shell->token + i) != '\"' && *(shell->token + i) != '\0'){
 					*(arg + j++) = *(shell->token + i++);
 				}
 				*(arg + j) = '\0';
