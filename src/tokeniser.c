@@ -27,9 +27,11 @@ int parseToken(struct shell *shell){
 	while(*(shell->token + i) != '\0'){
 		switch(*(shell->token + i)){
 			case ' ':
-				*(arg + j++) = (shell->job == ECHO) ? ' ' : '\0';
-				*(arg + j) = '\0';
-				shell->tokens[p++] = createArg(arg);
+				if (shell->job == ECHO || end == 0){
+					*(arg + j++) = (shell->job == ECHO) ? ' ' : '\0';
+					*(arg + j) = '\0';
+					shell->tokens[p++] = createArg(arg);
+				}
 				while(*(shell->token + i) == ' ')
 					i++;
 				j = 0;
