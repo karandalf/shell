@@ -57,6 +57,10 @@ int parseToken(struct shell *shell){
 				j = 0;
 				end = 1;
 				continue;
+			case '\\':
+				i++;
+				*(arg + j++) = *(shell-> token + i++);
+				continue;
 			default:
 				*(arg + j++) = *(shell->token + i++);
 				end = 0;
