@@ -6,8 +6,6 @@
 char *createArg(char *arg){
 	char *token = (char *)malloc(sizeof arg);
 	if (token != NULL){
-		while(*arg == ' ')
-			arg++;
 		strcpy(token, arg);
 	}
 	return token;
@@ -27,7 +25,6 @@ int parseToken(struct shell *shell){
 	while(*(shell->token + i) == ' ')
 		i++;
 	while(*(shell->token + i) != '\0'){
-		printf("char:%c.\n", *(shell->token + i));
 		switch(*(shell->token + i)){
 			case ' ':
 				*(arg + j++) = (shell->job == ECHO) ? ' ' : '\0';
@@ -35,12 +32,21 @@ int parseToken(struct shell *shell){
 				shell->tokens[p++] = createArg(arg);
 				while(*(shell->token + i) == ' ')
 					i++;
-				printf("token: %c\n", *(shell->token + i));
+				j = 0;
+				end = 1;
+				continue;
+			case '\'':
+				i++;
+				while (*(shell->token + i) != '\'' && *(shell->token + i) != '\0'){
+					*(arg + j++) = *(shell->token + i++);
+				}
+				*(arg + j) = '\0';
+				shell->tokens[p++] = createArg(arg);
+				i++;
 				j = 0;
 				end = 1;
 				continue;
 			default:
-				printf("def char:%c.\n", *(shell->token + i));
 				*(arg + j++) = *(shell->token + i++);
 				end = 0;
 		}
