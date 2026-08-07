@@ -26,7 +26,7 @@ int parseToken(struct shell *shell){
 	while(*(shell->token + i) != '\0'){
 		Start:
 		switch(*(shell->token + i)){
-/*			case '\'':
+			case '\'':
 				i++;
 				while(*(shell->token + i) != '\''){
 					*(arg + j++) = *(shell->token + i++);
@@ -35,7 +35,7 @@ int parseToken(struct shell *shell){
 				i++;
 				shell->tokens[p++] = createArg(arg);
 				j = 0;
-				goto Start;*/
+				goto Start;
 			case ' ':
 				*(arg + j++) = ' ';
 				*(arg + j) = '\0';
