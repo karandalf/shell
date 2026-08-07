@@ -16,9 +16,7 @@ int main(int argc, char *argv[]) {
 	shell.run = 1;
 
 	while (shell.run == 1){
-		getcwd(cwd, sizeof cwd);
-		/*printf("%s", AC_CYAN);
-		printf("%s", cwd);*/ 
+	//	setbuf(stdout, NULL);
 		printf("%s$ ", AC_BLUE);
 		printf("%s", AC_NORMAL);
 		getInput(&shell, commandList);
