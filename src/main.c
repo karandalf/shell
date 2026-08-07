@@ -6,6 +6,7 @@
 int main(int argc, char *argv[]) {
 	setbuf(stdout, NULL);
 	char command[BUFSIZE], input[BUFSIZE];
+	char cwd[BUFSIZE];
 	struct shell shell;
 	int job;
 
@@ -15,7 +16,11 @@ int main(int argc, char *argv[]) {
 	shell.run = 1;
 
 	while (shell.run == 1){
-		printf("$ ");
+		getcwd(cwd, sizeof cwd);
+		printf("%s", AC_CYAN);
+		printf("%s", cwd); 
+		printf("%s$ ", AC_BLUE);
+		printf("%s", AC_NORMAL);
 		getInput(&shell, commandList);
 		eval(&shell, commandList);
 	}
