@@ -53,6 +53,7 @@ int parseToken(struct shell *shell){
 				while (*(shell->token + i) != '\"' && *(shell->token + i) != '\0'){
 					if (*(shell->token + i) == '\\'){
 						*(arg + j++) = *(shell->token + ++i);
+						i++;
 						continue;
 					}
 					*(arg + j++) = *(shell->token + i++);
