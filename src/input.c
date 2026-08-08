@@ -91,12 +91,12 @@ void eval(struct shell *shell, Command **commandList){
 		argNums = parseToken(shell);			
 		pid_t pid = fork();
 		if (pid == 0){
+			printf("hi\n");
 			execv(shell->path, shell->tokens);	
 		}
 		else{
 			wait(NULL);
 		}
-		printf("hi\n");
 		for(i = 0; i < argNums; i++){
 			free(*(shell->tokens+i));
 			*(shell->tokens + i) = NULL;
