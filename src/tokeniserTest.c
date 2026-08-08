@@ -86,8 +86,15 @@ int parseToken(struct shell *shell){
 void parseInput(struct shell *shell){
 	size_t i;
 	char c;
-	for (i = 0; (c = getchar()) != ' ' && (c != '\n'); i++){
-		*(shell->command + i) = c;
+	if ((c = getchar()) == '\"'){
+		while((c = getchar()) != '\"')
+			*(shell->command + i) = c;
+		c = getchar();
+	}
+	else{
+		for (i = 0; (c = getchar()) != ' ' && (c != '\n'); i++){
+			*(shell->command + i) = c;
+		}
 	}
 	*(shell->command + i) = '\0';
 	memset(shell->token, '\0',  strlen(shell->token));
