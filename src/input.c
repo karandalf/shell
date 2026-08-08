@@ -96,6 +96,7 @@ void eval(struct shell *shell, Command **commandList){
 		else{
 			wait(NULL);
 		}
+		printf("hi\n");
 		for(i = 0; i < argNums; i++){
 			free(*(shell->tokens+i));
 			*(shell->tokens + i) = NULL;
