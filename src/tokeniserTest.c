@@ -90,7 +90,7 @@ void parseInput(struct shell *shell){
 		quote = c;	
 		i = 0;
 		while ((c = getchar()) != quote)
-			*(shell->command + i++);
+			*(shell->command + i++) = c;
 		c = getchar();
 	}
 	else{
