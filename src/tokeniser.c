@@ -26,7 +26,9 @@ int parseToken(struct shell *shell){
 		switch(*(shell->token + i)){
 			case ' ':
 				if (shell->job == ECHO || end == 0){
-					*(arg + j++) = (shell->job == ECHO) ? ' ' : '\0';
+					if (shell->job == ECHO){
+						*(arg+j++) = ' ';
+					}
 					*(arg + j) = '\0';
 					shell->tokens[p++] = createArg(arg);
 				}
