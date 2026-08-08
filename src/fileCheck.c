@@ -51,23 +51,3 @@ int checkFile(struct shell *shell){
 	return (dif > 0) ? EXIST : DNE; 
 }
 
-//Might be useful later but was the wrong idea right now
-
-/*int checkDir(struct shell *shell){
-	int dif;
-	char *start = getenv("PATH");
-	char *path = start;
-	char currentPath[BUFSIZE];
-	dif = strlen(start) - (path - start);
-	if ((strcmp(shell->token, "..") == 0))
-		return EXIST;
-	while (dif > 0){
-		path = parsePath(path, currentPath);
-		printf("current path: %s\n", currentPath);
-		printf("token:        %s\n", shell->token);
-		if (strncmp(shell->token, currentPath,  strlen(currentPath) - 1) == 0)
-			break;
-		dif = strlen(start) - (path - start);
-	}
-	return (dif > 0) ? EXIST : DNE; 
-}*/

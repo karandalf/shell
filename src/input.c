@@ -91,7 +91,6 @@ void eval(struct shell *shell, Command **commandList){
 		argNums = parseToken(shell);			
 		pid_t pid = fork();
 		if (pid == 0){
-			//printf("path: %s\n", shell->path);
 			execv(shell->path, shell->tokens);	
 		}
 		else{
