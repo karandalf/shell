@@ -42,7 +42,7 @@ void eval(struct shell *shell, Command **commandList){
 	else if (shell->job == ECHO){
 		int argNum = parseToken(shell);
 		for (size_t i = 0; i < argNum - 1; i++)
-			printf("%s", *(shell->tokens + 1 + i));
+			printf("%s ", *(shell->tokens + 1 + i));
 		putchar('\n');
 		for(size_t i = 0; i < argNum; i++){
 			free(*(shell->tokens + i));
@@ -91,7 +91,7 @@ void eval(struct shell *shell, Command **commandList){
 		argNums = parseToken(shell);			
 		pid_t pid = fork();
 		if (pid == 0){
-			printf("hi\n");
+			//printf("path: %s\n", shell->path);
 			execv(shell->path, shell->tokens);	
 		}
 		else{
