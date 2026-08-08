@@ -93,4 +93,3 @@ void parseInput(struct shell *shell){
 		*(shell->token + i) = '\0';
 	}
 }
-

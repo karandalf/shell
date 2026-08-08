@@ -32,7 +32,7 @@ struct shell{
 	char path[BUFSIZE];
 	char command[BUFSIZE];
 	char token[BUFSIZE];
-	char *tokens[100];
+	char *tokens[BUFSIZE];
 };
 
 
