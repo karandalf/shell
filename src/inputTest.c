@@ -62,8 +62,10 @@ void eval(struct shell *shell, Command **commandList){
 			if ((*(commandList + i))->type == BUILTIN)
 				printf("%s is a shell builtin\n", shell->token);
 		if (i == COMMANDS){
-			if(!checkFile(shell))
-				printf("%s: not found\n", shell->token);
+			if(!checkFile(shell)){
+				printf("%s%s: not found\n", shell->token, AC_RED);
+				printf("%s", AC_NORMAL);
+			}
 		}
 		memset(shell->token, '\0',  strlen(shell->token));
 	}
@@ -78,7 +80,8 @@ void eval(struct shell *shell, Command **commandList){
 		if (!strcmp(shell->token,"~"))
 			chdir(getenv("HOME"));
 		else if (chdir(shell->token)){
-			printf("cd: %s: No such file or directory\n", shell->token);
+			printf("cd: %s%s: No such file or directory\n", shell->token, AC_RED);
+			printf("%s", AC_NORMAL);
 		}
 		memset(shell->token, '\0',  strlen(shell->token));
 	}
@@ -87,7 +90,8 @@ void eval(struct shell *shell, Command **commandList){
 		int argNums;
 		//char *tokens[BUFSIZE];
 		if(!checkFile(shell) || *(shell->command) == '\0'){
-			printf("%s: command not found\n", shell->command);
+			printf("%s%s: command not found\n", shell->command, AC_RED);
+			printf("%s", AC_NORMAL);
 			return;
 		}
 		argNums = parseToken(shell);			
@@ -100,7 +104,7 @@ void eval(struct shell *shell, Command **commandList){
 			wait(NULL);
 		}
 		for(i = 0; i < argNums; i++){
-			free(*(shell->tokens+i));
+			free(*(shell->tokens + i));
 			*(shell->tokens + i) = NULL;
 		}
 	}
