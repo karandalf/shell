@@ -20,6 +20,7 @@ int parseToken(struct shell *shell){
 	i = 0;
 	j = 0;
 	shell->tokens[p++] = createArg(shell->command);
+	//printf("shell command: %s\n", shell->command);
 	while(*(shell->token + i) == ' ')
 		i++;
 	while(*(shell->token + i) != '\0'){
