@@ -73,7 +73,7 @@ int parseToken(struct shell *shell){
 		shell->tokens[p++] = createArg(arg);
 	}
 	memset(shell->token, '\0', sizeof shell->token);
-	shell->tokens[p] == NULL;
+	shell->tokens[p] = NULL;
 //	printf("p: %ld\n", p);
 	return p;
 }
