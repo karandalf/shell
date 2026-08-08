@@ -44,9 +44,8 @@ void eval(struct shell *shell, Command **commandList){
 		for (size_t i = 0; i < argNum - 1; i++)
 			printf("%s", *(shell->tokens + 1 + i));
 		putchar('\n');
-		memset(shell->token, '\0', sizeof shell->token);
 		for(size_t i = 0; i < argNum; i++){
-			free(*(shell->tokens+i));
+			free(*(shell->tokens + i));
 			*(shell->tokens + i) = NULL;
 		}
 	}

@@ -4,7 +4,7 @@
 #include "file.h"
 
 char *createArg(char *arg){
-	char *token = (char *)malloc(sizeof arg);
+	char *token = (char *)malloc(strlen(arg));
 	if (token != NULL){
 		strcpy(token, arg);
 	}
@@ -72,7 +72,7 @@ int parseToken(struct shell *shell){
 	}
 	memset(shell->token, '\0', sizeof shell->token);
 	shell->tokens[p] == NULL;
-	//printf("p: %ld\n", p);
+	printf("p: %ld\n", p);
 	return p;
 }
 
