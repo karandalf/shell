@@ -39,14 +39,13 @@ void eval(struct shell *shell, Command **commandList){
 	if (shell->job == EXIT){
 		shell->run = 0;
 	}
-	else if (shell->job == ECHO){
+	else if (shell-job == ECHO){
 		int argNum = parseToken(shell);
 		for (size_t i = 0; i < argNum - 1; i++)
 			printf("%s", *(shell->tokens + 1 + i));
 		putchar('\n');
 		//printf("argnum: %d\n", argNum);
 		for(size_t i = 0; i < argNum; i++){
-			printf("i:%ld\n", i);
 			free(*(shell->tokens + i));
 			*(shell->tokens + i) = NULL;
 		}
@@ -105,7 +104,6 @@ void eval(struct shell *shell, Command **commandList){
 			wait(NULL);
 		}
 		for(i = 0; i < argNums; i++){
-			printf("i:%ld\n", i);
 			free(*(shell->tokens + i));
 			*(shell->tokens + i) = NULL;
 		}
