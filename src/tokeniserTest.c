@@ -91,8 +91,10 @@ void parseInput(struct shell *shell){
 	if ((c = getchar()) == '\'' || c == '\"'){
 		quote = c;	
 		i = 0;
-		while ((c = getchar()) != quote)
+		while ((c = getchar()) != quote){
+			i = (quote == '\"' && c == '\\') ? i++ : i;
 			*(shell->command + i++) = c;
+		}	
 		c = getchar();
 	}
 	else{
