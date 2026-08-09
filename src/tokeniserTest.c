@@ -4,7 +4,7 @@
 #include "file.h"
 
 char *createArg(char *arg){
-	char *token = (char *)malloc(strlen(arg));
+	char *token = (char *)malloc(strlen(arg) + 1);
 	if (token != NULL){
 		strcpy(token, arg);
 	}
@@ -89,6 +89,7 @@ void parseInput(struct shell *shell){
 	char c, quote;
 	if ((c = getchar()) == '\'' || c == '\"'){
 		quote = c;	
+		printf("quote:%c.\n", quote);
 		i = 0;
 		while ((c = getchar()) != quote)
 			*(shell->command + i++) = c;

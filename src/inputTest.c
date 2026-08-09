@@ -46,7 +46,7 @@ void eval(struct shell *shell, Command **commandList){
 		putchar('\n');
 		//printf("argnum: %d\n", argNum);
 		for(size_t i = 0; i < argNum; i++){
-			//printf("i:%ld\n", i);
+			printf("i:%ld\n", i);
 			free(*(shell->tokens + i));
 			*(shell->tokens + i) = NULL;
 		}
@@ -67,6 +67,7 @@ void eval(struct shell *shell, Command **commandList){
 				printf("%s", AC_NORMAL);
 			}
 		}
+		memset(shell->path, '\0', strlen(shell->path));
 		memset(shell->token, '\0',  strlen(shell->token));
 	}
 	else if (shell->job == PWD){
@@ -104,6 +105,7 @@ void eval(struct shell *shell, Command **commandList){
 			wait(NULL);
 		}
 		for(i = 0; i < argNums; i++){
+			printf("i:%ld\n", i);
 			free(*(shell->tokens + i));
 			*(shell->tokens + i) = NULL;
 		}
