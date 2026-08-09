@@ -39,7 +39,7 @@ void eval(struct shell *shell, Command **commandList){
 	if (shell->job == EXIT){
 		shell->run = 0;
 	}
-	else if (shell-job == ECHO){
+	else if (shell->job == ECHO){
 		int argNum = parseToken(shell);
 		for (size_t i = 0; i < argNum - 1; i++)
 			printf("%s", *(shell->tokens + 1 + i));
