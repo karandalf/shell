@@ -23,6 +23,8 @@ void commands(Command **commandList){
 }
 
 void getInput(struct shell *shell, Command **commandList){
+	shell->stream.fileOut = 0;
+	shell->stream.fileErr = 0;
 	size_t i;
 	int job = 0;
 	parseInput(shell);
@@ -33,6 +35,7 @@ void getInput(struct shell *shell, Command **commandList){
 		}
 	}
 	shell->job = job;
+	shell->argNum = parseToken(shell);
 }
 
 void eval(struct shell *shell, Command **commandList){
@@ -40,61 +43,62 @@ void eval(struct shell *shell, Command **commandList){
 		shell->run = 0;
 	}
 	else if (shell->job == ECHO){
-		int argNum = parseToken(shell);
-		for (size_t i = 0; i < argNum - 1; i++)
+		redirect(shell);
+		for (size_t i = 0; i < (shell->argNum - 1); i++)
 			printf("%s", *(shell->tokens + 1 + i));
 		putchar('\n');
-		//printf("argnum: %d\n", argNum);
-		for(size_t i = 0; i < argNum; i++){
-			free(*(shell->tokens + i));
-			*(shell->tokens + i) = NULL;
-		}
+		closeRedirect(shell);	
+		freeTokens(shell);
 	}
 	else if (shell->job == TYPE){
 		size_t i;
 		for (i = 0; i < COMMANDS; i++){
-			if (strcmp(shell->token,(*(commandList + i))->name) == 0)
+			if (strcmp(*(shell->tokens + 1),(*(commandList + i))->name) == 0)
 				break;
 		}
 		//Checking for builtin command
+		redirect(shell);
 		if (i < COMMANDS)
 			if ((*(commandList + i))->type == BUILTIN)
-				printf("%s is a shell builtin\n", shell->token);
+				printf("%s is a shell builtin\n", *(shell->tokens + 1));
 		if (i == COMMANDS){
 			if(!checkFile(shell)){
-				printf("%s%s: not found\n", shell->token, AC_RED);
+				printf("%s%s: not found\n", *(shell->tokens + 1), AC_RED);
 				printf("%s", AC_NORMAL);
 			}
 		}
+		closeRedirect(shell);
 		memset(shell->path, '\0', strlen(shell->path));
 		memset(shell->token, '\0',  strlen(shell->token));
+		freeTokens(shell);
 	}
 	else if (shell->job == PWD){
 		char cwd[BUFSIZE];
+		redirect(shell);
 		if (getcwd(cwd, sizeof cwd) != NULL)
 			printf("%s\n", cwd);	
 		else
 			printf("Cannot print CWD\n");
+		closeRedirect(shell);
+		freeTokens(shell);
 	}
 	else if (shell->job == CD){
-		if (!strcmp(shell->token,"~"))
+		if (!strcmp(*(shell->tokens + 1),"~"))
 			chdir(getenv("HOME"));
-		else if (chdir(shell->token)){
-			printf("cd: %s%s: No such file or directory\n", shell->token, AC_RED);
+		else if (chdir(*(shell->tokens + 1))){
+			printf("cd: %s%s: No such file or directory\n", *(shell->tokens + 1), AC_RED);
 			printf("%s", AC_NORMAL);
 		}
-		memset(shell->token, '\0',  strlen(shell->token));
 	}
 	else{
-		size_t i;
-		int argNums;
 		//char *tokens[BUFSIZE];
+		redirect(shell);
+		//printf("shell arg: %d\n", shell->argNum);
 		if(!checkFile(shell) || *(shell->command) == '\0'){
 			printf("%s%s: command not found\n", shell->command, AC_RED);
 			printf("%s", AC_NORMAL);
 			return;
 		}
-		argNums = parseToken(shell);			
 		pid_t pid = fork();
 		if (pid == 0){
 		//	printf("shell->path: %s\n", shell->path);
@@ -103,9 +107,7 @@ void eval(struct shell *shell, Command **commandList){
 		else{
 			wait(NULL);
 		}
-		for(i = 0; i < argNums; i++){
-			free(*(shell->tokens + i));
-			*(shell->tokens + i) = NULL;
-		}
+		closeRedirect(shell);
+		freeTokens(shell);
 	}
 }

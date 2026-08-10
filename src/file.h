@@ -7,5 +7,7 @@
 
 int checkFile(struct shell *shell);
 int checkDir(struct shell *shell);
+void redirect(struct shell *shell);
+void closeRedirect(struct shell *shell);
 
 #endif

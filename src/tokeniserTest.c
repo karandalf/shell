@@ -3,7 +3,13 @@
 #include "command.h"
 #include "file.h"
 
-char *createArg(char *arg){
+void freeTokens(struct shell *shell){
+	for(size_t i = 0; i < (shell->argNum); i++){
+		free(*(shell->tokens + i));
+		*(shell->tokens + i) = NULL;
+	}
+}
+static char *createArg(char *arg){
 	//Needs strlen(arg) + 1 for the NULL terminator
 	char *token = (char *)malloc(strlen(arg) + 1);
 	if (token != NULL){
@@ -15,8 +21,10 @@ char *createArg(char *arg){
 int parseToken(struct shell *shell){
 	size_t i, j;
 	size_t p = 0;
+	size_t fp = 0;
 	char c;
-	int end = 1;
+	int end = SPACE;
+	int commandTokens = 0;
 	char arg[BUFSIZE];
 	i = 0;
 	j = 0;
@@ -27,9 +35,9 @@ int parseToken(struct shell *shell){
 	while(*(shell->token + i) != '\0'){
 		switch(*(shell->token + i)){
 			case ' ':
-				if (shell->job == ECHO || end == 0){
+				if (shell->job == ECHO || end == WORD){
 					if (shell->job == ECHO){
-						*(arg+j++) = ' ';
+						*(arg + j++) = ' ';
 					}
 					*(arg + j) = '\0';
 					shell->tokens[p++] = createArg(arg);
@@ -37,7 +45,7 @@ int parseToken(struct shell *shell){
 				while(*(shell->token + i) == ' ')
 					i++;
 				j = 0;
-				end = 1;
+				end = SPACE;
 				continue;
 			case '\'':
 				i++;
@@ -48,7 +56,7 @@ int parseToken(struct shell *shell){
 				shell->tokens[p++] = createArg(arg);
 				i++;
 				j = 0;
-				end = 1;
+				end = QUOTE;
 				continue;
 			case '\"':
 				i++;
@@ -64,15 +72,36 @@ int parseToken(struct shell *shell){
 				shell->tokens[p++] = createArg(arg);
 				i++;
 				j = 0;
-				end = 1;
+				end = QUOTE;
 				continue;
 			case '\\':
 				i++;
-				*(arg + j++) = *(shell-> token + i++);
+				*(arg + j++) = *(shell->token + i++);
 				continue;
+		//TODO:Need to come up with redirection method.
+			case '>':
+				if (end == WORD){
+					*(arg + j) = '\0';
+					shell->tokens[p++] = createArg(arg);
+					j = 0;
+				}
+				commandTokens = (commandTokens == 0) ? p : commandTokens;
+				shell->stream.files[fp] = p;
+				if (*(shell->token + i - 1) != '2') shell->stream.fileOut = p;
+				if (*(shell->token + i - 1) == '2') shell->stream.fileErr = p;
+				shell->stream.mode[fp] = (*(shell->token + ++i) == '>') ? APPEND : WRITE;
+				shell->stream.outIndex = fp++;
+				i = (*(shell->token + i) == '>' || *(shell->token + i) == ' ') ? (i + 1) : i;
+				end = OTHER;
+				continue;
+			case '1':
+				if (*(shell->token + i + 1) == '>'){
+					i++;
+					continue;
+				}
 			default:
 				*(arg + j++) = *(shell->token + i++);
-				end = 0;
+				end = WORD;
 		}
 	}
 	if (!end){
@@ -81,8 +110,10 @@ int parseToken(struct shell *shell){
 	}
 	memset(shell->token, '\0', sizeof shell->token);
 	shell->tokens[p] = NULL;
+	shell->stream.files[fp] = '\0';
+	shell->stream.fileNum = fp;
 //	printf("p: %ld\n", p);
-	return p;
+	return (commandTokens == 0) ? p : commandTokens;
 }
 
 void parseInput(struct shell *shell){

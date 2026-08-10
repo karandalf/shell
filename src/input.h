@@ -26,15 +26,28 @@ typedef struct{
 	int job;
 } Command;
 
+typedef struct{
+	int files[BUFSIZE];
+	int fileNum;
+	int fileOut;
+	int outIndex;
+	int fileErr;
+	int errIndex;
+	int mode[BUFSIZE];
+	int og_stdout;
+	int og_stderr;
+} Stream;
+
 struct shell{
 	int run;
 	int job;
+	int argNum;
 	char path[BUFSIZE];
 	char command[BUFSIZE];
 	char token[BUFSIZE];
 	char *tokens[BUFSIZE];
+	Stream stream;
 };
-
 
 void getInput(struct shell *shell, Command **commandList);
 void commands(Command **commandList);
