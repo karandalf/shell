@@ -97,7 +97,8 @@ int parseToken(struct shell *shell){
 					shell->stream.errIndex = fp++;
 				}
 				i++;
-				i = (*(shell->token + i) == '>' || *(shell->token + i) == ' ') ? (i + 1) : i;
+				i = (*(shell->token + i) == '>') ? (i + 1) : i;
+				i = (*(shell->token + i) == ' ') ? (i + 1) : i;
 				end = OTHER;
 				continue;
 			case '1':
