@@ -96,6 +96,7 @@ int parseToken(struct shell *shell){
 					shell->stream.fileErr = p;
 					shell->stream.errIndex = fp++;
 				}
+				i++;
 				i = (*(shell->token + i) == '>' || *(shell->token + i) == ' ') ? (i + 1) : i;
 				end = OTHER;
 				continue;
