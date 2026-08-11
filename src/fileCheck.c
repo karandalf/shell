@@ -28,6 +28,14 @@ void redirect(struct shell *shell){
 		fclose(fileOut);
 	}
 	//TODO: Needs to include error redirects and error handling
+	if (shell->stream.fileErr){
+		fflush(stderr);
+		fileErr = fopen((shell->tokens[shell->stream.fileErr]), (shell->stream.mode[shell->stream.errIndex] == WRITE) ? "w" : "a");
+		int fileErr_fd = fileno(fileErr);
+		dup2(fileErr_fd, STDERR_FILENO);
+		close(fileErr_fd);
+		fclose(fileErr);
+	}
 }
 
 void closeRedirect(struct shell *shell){
@@ -36,6 +44,11 @@ void closeRedirect(struct shell *shell){
 		fflush(stdout);
 		dup2(shell->stream.og_stdout, STDOUT_FILENO);
 		close(shell->stream.og_stdout);
+	}
+	if (shell->stream.fileErr){
+		fflush(stderr);
+		dup2(shell->stream.og_stderr, STDERR_FILENO);
+		close(shell->stream.og_stderr);
 	}
 }
 

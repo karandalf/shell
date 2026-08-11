@@ -87,15 +87,22 @@ int parseToken(struct shell *shell){
 				}
 				commandTokens = (commandTokens == 0) ? p : commandTokens;
 				shell->stream.files[fp] = p;
-				if (*(shell->token + i - 1) != '2') shell->stream.fileOut = p;
-				if (*(shell->token + i - 1) == '2') shell->stream.fileErr = p;
-				shell->stream.mode[fp] = (*(shell->token + ++i) == '>') ? APPEND : WRITE;
-				shell->stream.outIndex = fp++;
+				shell->stream.mode[fp] = (*(shell->token + i + 1) == '>') ? APPEND : WRITE;
+				if (*(shell->token + i - 1) != '2') {
+					shell->stream.fileOut = p;
+					shell->stream.outIndex = fp++;
+				}
+				if (*(shell->token + i - 1) == '2'){
+					shell->stream.fileErr = p;
+					shell->stream.errIndex = fp++;
+				}
 				i = (*(shell->token + i) == '>' || *(shell->token + i) == ' ') ? (i + 1) : i;
 				end = OTHER;
 				continue;
 			case '1':
+			case '2':
 				if (*(shell->token + i + 1) == '>'){
+					printf("hi\n");
 					i++;
 					continue;
 				}
