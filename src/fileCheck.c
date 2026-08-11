@@ -31,6 +31,7 @@ void redirect(struct shell *shell){
 	if (shell->stream.fileErr){
 		fflush(stderr);
 		fileErr = fopen((shell->tokens[shell->stream.fileErr]), (shell->stream.mode[shell->stream.errIndex] == WRITE) ? "w" : "a");
+		if (fileErr == NULL) printf("null\n");
 		int fileErr_fd = fileno(fileErr);
 		dup2(fileErr_fd, STDERR_FILENO);
 		close(fileErr_fd);
