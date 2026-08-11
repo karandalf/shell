@@ -93,15 +93,16 @@ void eval(struct shell *shell, Command **commandList){
 	else{
 		//char *tokens[BUFSIZE];
 		redirect(shell);
-		//printf("shell arg: %d\n", shell->argNum);
 		if(!checkFile(shell) || *(shell->command) == '\0'){
 			printf("%s%s: command not found\n", shell->command, AC_RED);
 			printf("%s", AC_NORMAL);
+			closeRedirect(shell);
 			return;
 		}
 		pid_t pid = fork();
 		if (pid == 0){
 		//	printf("shell->path: %s\n", shell->path);
+			shell->tokens[shell->argNum] = NULL;
 			execv(shell->path, shell->tokens);	
 		}
 		else{
