@@ -102,7 +102,6 @@ int parseToken(struct shell *shell){
 			case '1':
 			case '2':
 				if (*(shell->token + i + 1) == '>'){
-					printf("hi\n");
 					i++;
 					continue;
 				}
